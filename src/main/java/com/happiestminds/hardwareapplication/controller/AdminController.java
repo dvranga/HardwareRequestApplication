@@ -18,10 +18,12 @@ import com.happiestminds.hardwareapplication.dto.ResponseDTO;
 import com.happiestminds.hardwareapplication.service.IAdminService;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/hardwareapplication")
 @CrossOrigin(allowedHeaders = "*",origins = "*")
+@Slf4j
 public class AdminController {
 
 	@Autowired
@@ -31,13 +33,23 @@ public class AdminController {
 	@ApiOperation("status Details")
 	public ResponseEntity<ResponseDTO> getStatusDetails(){
 		Map<String, Long> statusDetails = adminService.getStatusDetails();
+		if (statusDetails.isEmpty()) {
+			log.error("Status Details are Empty");
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO(400, "Status Details are Empty"),HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO(200, "Successfull", statusDetails), HttpStatus.OK);
 	}
 	
 	@PostMapping("/status/bydate")
 	@ApiOperation("Status Details By Date")
 	public ResponseEntity<ResponseDTO> getStatusDetailsByDate(@RequestBody HardwareRequestDTO hardwareRequestDTO){
+		log.debug("HardwareRequestDTO "+hardwareRequestDTO.toString());
 		Map<String, Long> statusDetails = adminService.getStatusDetailsByDate(hardwareRequestDTO);
+		if (statusDetails.isEmpty()) {
+			log.error("Status Details are Empty");
+			return new ResponseEntity<ResponseDTO>(new ResponseDTO(400, "Status Details are Empty"),HttpStatus.BAD_REQUEST);
+		}
+		log.debug("Status details"+statusDetails);
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO(200, "Succesfull", statusDetails),HttpStatus.OK);
 	}
 	

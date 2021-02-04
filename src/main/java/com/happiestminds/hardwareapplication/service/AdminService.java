@@ -11,7 +11,10 @@ import com.happiestminds.hardwareapplication.dto.HardwareRequestDTO;
 import com.happiestminds.hardwareapplication.model.HardwareRequestOrder;
 import com.happiestminds.hardwareapplication.repository.HardWareRequestOrderRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AdminService implements IAdminService {
 	
 	Map<String, Long> requestDetails= new HashMap<>();
@@ -28,12 +31,12 @@ public class AdminService implements IAdminService {
 		requestDetails.put("approved", approved);
 		requestDetails.put("rejected", rejected);
 		requestDetails.put("submitted", submitted);
+		log.debug("find all"+requestDetails);
 		return requestDetails;
 	}
 
 	@Override
 	public Map<String, Long> getStatusDetailsByDate(HardwareRequestDTO hardwareRequestDTO) {
-		
 		List<HardwareRequestOrder> findAll = hardWareRequestRepository.findStatusDetailsByDate(hardwareRequestDTO.createDate, hardwareRequestDTO.modifiedDate);
 		long approved = findAll.stream().filter(request -> request.status.equalsIgnoreCase("Approved")).count();
 		long rejected = findAll.stream().filter(request -> request.status.equalsIgnoreCase("Rejected")).count();
@@ -41,6 +44,7 @@ public class AdminService implements IAdminService {
 		requestDetails.put("approved", approved);
 		requestDetails.put("rejected", rejected);
 		requestDetails.put("submitted", submitted);
+		log.info("Find All"+requestDetails);
 		return requestDetails;
 	}
 

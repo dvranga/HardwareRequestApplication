@@ -34,4 +34,10 @@ public class ResponseDTO {
 		this.statusCode = statusCode;
 	}
 
+	public ResponseDTO(int statusCode, String message, List<String> errMessage) {
+		this.message = message;
+		this.data = errMessage;
+		this.statusCode = statusCode;
+	}
+
 }
